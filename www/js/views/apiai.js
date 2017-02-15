@@ -11,7 +11,7 @@ App.apiai = function(callback) {
    // Connect to api.ai
     ApiAIPlugin.init(
     {
-       clientAccessToken: "a54628910bff44608bfd1511ba69e26e", // insert your client access key here
+       clientAccessToken: "INSERT YOU CLIENT ACCESS TOKEN", // insert your client access key here
        lang: "en" // set lang tag from list of supported languages
      },
      // Success Connect to api.ai
