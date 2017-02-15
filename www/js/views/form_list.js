@@ -32,6 +32,7 @@ var FormListView = Backbone.View.extend({
     },
 
     show: function() {
+        console.log("form_list show");
         App.views.header.markActive('header_forms', "Forms");
         this.render();
         $(this.$el).show();

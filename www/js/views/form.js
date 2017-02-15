@@ -13,11 +13,18 @@ $fh.ready({}, function() {
             }
 
             this.loadForm(params, function() {
+            console.log("form Initialize loadForm");
                 self.trigger("loaded");
                 if (params.autoShow) {
                     self.$el.show();
+
                 }
                 self.render();
+                App.apiai(function(error,value)
+                {
+                  console.log("Error " + error + "Value" + value);
+                 });
+
             });
         },
         saveToDraft: function() {
@@ -37,6 +44,11 @@ $fh.ready({}, function() {
         },
         submit: function() {
 
+            /* Test form submission UI
+                App.populateFieldData(function(error,value)
+                {
+                    console.log("Error " + error + "Value" + value);
+                });*/
             AlertView.showAlert("Processing Submission", "info", 1000);
 
             $fh.forms.backbone.FormView.prototype.submit.apply(this, [
