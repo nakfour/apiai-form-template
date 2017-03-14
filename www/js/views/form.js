@@ -20,10 +20,10 @@ $fh.ready({}, function() {
 
                 }
                 self.render();
-              /*  App.apiai(function(error,value)
+                App.apiai(function(error,value)
                 {
                   console.log("Error " + error + "Value" + value);
-                 });*/
+                 });
 
             });
         },
@@ -45,11 +45,12 @@ $fh.ready({}, function() {
         submit: function() {
 
             // Test form submission UI
-                App.populateFieldData("carmodel", "911 Turbo",function(error,value)
+            /*    App.populateFieldData("carmodel", "911 Turbo",function(error,value)
                 {
                     console.log("Error " + error + "Value" + value);
                 });
-           /* AlertView.showAlert("Processing Submission", "info", 1000);
+            AlertView.showAlert("Processing Submission", "info", 1000);*/
+            console.log("Submitting Report");
 
             $fh.forms.backbone.FormView.prototype.submit.apply(this, [
 
@@ -64,7 +65,7 @@ $fh.ready({}, function() {
                         AlertView.showAlert("Adding To Upload Queue", "info", 1000);
                     }
                 }
-            ]);*/
+            ]);
         }
     });
 });

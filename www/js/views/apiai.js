@@ -84,15 +84,47 @@ App.sendVoice = function(question) {
                      {
                             console.log("We are not done with the conversation, calling recursive");
                             App.sendVoice(question2);
+
                      }
                      else
                      {
                             // Speak the last conversation
-                            TTS.speak(question2, function () {
+                            /*Great Work we know from your location you are at $trackname, your total distance covered is $numberoflaps*1000 miles we will submit your report on $carmodel, $carmake for $caryear.*/
+                            /* Construct the final answer before we submit*/
+                            // Only submit report when fields are valid
+                            // Sometimes we can cancel and this ends the convestation
+                            if((response2.result.parameters.carmake) &&
+                            (response2.result.parameters.carmodel) &&
+                            (response2.result.parameters.caryear) &&
+                            (response2.result.parameters.trackname) &&
+                            (response2.result.parameters.drivetime) &&
+                            (response2.result.parameters.comment))
+                            {
+
+
+                                var driveTimeInhr = parseInt(response2.result.parameters.drivetime)/60;
+                                var finalString= "Great Work !! Your total distance for "
+                                + response2.result.parameters.carmodel + " " + response2.result.parameters.carmake + " at " + response2.result.parameters.trackname + " was " + parseInt(response2.result.parameters.numberoflaps)*13 + " miles " +
+                                " and your average speed was " + Math.round(parseInt(response2.result.parameters.numberoflaps)*13/driveTimeInhr) + " miles per hour. We will submit your report.";
+                                console.log(finalString);
+
+                                //TTS.speak(question2, function () {
+                                TTS.speak(finalString, function () {
                                   //alert('success');
-                            }, function (reason) {
+                                  // Submitting report
+                                  App.views.form.submit();
+                                }, function (reason) {
                                   alert(reason);
-                            });
+                                });
+                            } else
+                            {
+                                TTS.speak(question2, function () {
+                                     }, function (reason) {
+                                         alert(reason);
+                                    });
+                            }
+
+
                      }
                  },
                  function (error) {
@@ -118,41 +150,64 @@ App.populateForm = function(response) {
 
     /*Response json: {   "id": "3a23ebfa-eff1-4125-9eb7-700f10c78837",   "timestamp": "2017-02-15T03:05:01.991Z",   "lang": "en",
     "result": {     "source": "agent",     "resolvedQuery": "Porsche",     "action": "createnewcarreport",     "actionIncomplete": true,
-    "parameters": {       "CarMake": "Porsche",       "CarModel": "",       "CarYear": "",       "NumberOfLaps": "",       "TrackName": ""     },     "contexts": [       {         "name": "47c48814-3321-46ce-af64-6e10f6a3364d_id_dialog_context",         "parameters": {           "TrackName.original": "",           "CarMake": "Porsche",           "CarModel": "",           "NumberOfLaps": "",           "NumberOfLaps.original": "",           "CarModel.original": "",           "CarMake.original": "Porsche",           "TrackName": "",           "CarYear": "",           "CarYear.original": ""         },         "lifespan": 2       },       {         "name": "create_report-car_dialog_context",         "parameters": {           "TrackName.original": "",           "CarMake": "Porsche",           "CarModel": "",           "NumberOfLaps": "",           "NumberOfLaps.original": "",           "CarModel.original": "",           "CarMake.original": "Porsche",           "TrackName": "",           "CarYear": "",           "CarYear.original": ""         },         "lifespan": 2       },       {         "name": "create_report-car_dialog_params_carmodel",         "parameters": {           "TrackName.original": "",           "CarMake": "Porsche",           "CarModel": "",           "NumberOfLaps": "",           "NumberOfLaps.original": "",           "CarModel.original": "",           "CarMake.original": "Porsche",           "TrackName": "",           "CarYear": "",           "CarYear.original": ""         },         "lifespan": 1       }     ],     "metadata": {       "intentId": "47c48814-3321-46ce-af64-6e10f6a3364d",       "webhookUsed": "false",       "webhookForSlotFillingUsed": "false",       "intentName": "create.report-car"     },     "fulfillment": {       "speech": "What is the car model?",       "messages": [         {           "type": 0,           "speech": "What is the car model?"         }       ]     },     "score": 1.0   },   "status": {     "code": 200,     "errorType": "success"   },   "sessionId": "ecf99cd2-bb54-4dab-b300-d648832e656f" }
+    "parameters": {       "carmake": "Porsche",       "carmodel": "",       "caryear": "",       "numberoflaps": "",       "trackname": ""     },     "contexts": [       {         "name": "47c48814-3321-46ce-af64-6e10f6a3364d_id_dialog_context",         "parameters": {           "trackname.original": "",           "carmake": "Porsche",           "carmodel": "",           "numberoflaps": "",           "numberoflaps.original": "",           "carmodel.original": "",           "carmake.original": "Porsche",           "trackname": "",           "caryear": "",           "caryear.original": ""         },         "lifespan": 2       },       {         "name": "create_report-car_dialog_context",         "parameters": {           "trackname.original": "",           "carmake": "Porsche",           "carmodel": "",           "numberoflaps": "",           "numberoflaps.original": "",           "carmodel.original": "",           "carmake.original": "Porsche",           "trackname": "",           "caryear": "",           "caryear.original": ""         },         "lifespan": 2       },       {         "name": "create_report-car_dialog_params_carmodel",         "parameters": {           "trackname.original": "",           "carmake": "Porsche",           "carmodel": "",           "numberoflaps": "",           "numberoflaps.original": "",           "carmodel.original": "",           "carmake.original": "Porsche",           "trackname": "",           "caryear": "",           "caryear.original": ""         },         "lifespan": 1       }     ],     "metadata": {       "intentId": "47c48814-3321-46ce-af64-6e10f6a3364d",       "webhookUsed": "false",       "webhookForSlotFillingUsed": "false",       "intentName": "create.report-car"     },     "fulfillment": {       "speech": "What is the car model?",       "messages": [         {           "type": 0,           "speech": "What is the car model?"         }       ]     },     "score": 1.0   },   "status": {     "code": 200,     "errorType": "success"   },   "sessionId": "ecf99cd2-bb54-4dab-b300-d648832e656f" }
 
     */
-    //console.log(response.result.parameters.CarMake);
+    //console.log(response.result.parameters.carmake);
     //console.log(response);
-    console.log("CarMake:" + response.result.parameters.CarMake);
-    console.log("CarModel:" + response.result.parameters.CarModel);
-    console.log("CarYear:" + response.result.parameters.CarYear);
-    console.log("NumberOfLaps:" + response.result.parameters.NumberOfLaps);
-    console.log("TrackName:" + response.result.parameters.TrackName);
-    console.log("Comment:" + response.result.parameters.Comment);
+    console.log("carmake:" + response.result.parameters.carmake);
+    console.log("carmodel:" + response.result.parameters.carmodel);
+    console.log("caryear:" + response.result.parameters.caryear);
+    console.log("numberoflaps:" + response.result.parameters.numberoflaps);
+    console.log("trackname:" + response.result.parameters.trackname);
+    console.log("drivetime:" + response.result.parameters.drivetime);
+    console.log("comment:" + response.result.parameters.comment);
 
-    if(response.result.parameters.CarMake) {
-        console.log("CarMake has value");
-        App.populateFieldData("carmake",response.result.parameters.CarMake , function(err,value) { console.log("Error: " + err + " Value: " +value); })
+    if(response.result.parameters.carmake) {
+        console.log("carmake has value");
+        App.populateFieldData("carmake",response.result.parameters.carmake , function(err,value) { console.log("Error: " + err + " Value: " +value); })
     }
-     if(response.result.parameters.CarModel) {
-        console.log("CarModel has value");
-        App.populateFieldData("carmodel",response.result.parameters.CarModel , function(err,value) { console.log("Error: " + err + " Value: " +value); })
+     if(response.result.parameters.carmodel) {
+        console.log("carmodel has value");
+        App.populateFieldData("carmodel",response.result.parameters.carmodel , function(err,value) { console.log("Error: " + err + " Value: " +value); })
     }
-    if(response.result.parameters.CarYear) {
-        console.log("CarYear has value");
-        App.populateFieldData("caryear",parseInt(response.result.parameters.CarYear) , function(err,value) { console.log("Error: " + err + " Value: " +value); })
+    if(response.result.parameters.caryear) {
+        console.log("caryear has value");
+        App.populateFieldData("caryear",parseInt(response.result.parameters.caryear) , function(err,value) { console.log("Error: " + err + " Value: " +value); })
     }
-    if(response.result.parameters.NumberOfLaps) {
-            console.log("NumberOfLaps has value");
-            App.populateFieldData("numberoflaps",parseInt(response.result.parameters.NumberOfLaps) , function(err,value) { console.log("Error: " + err + " Value: " +value); })
+    if(response.result.parameters.numberoflaps) {
+            console.log("numberoflaps has value");
+            App.populateFieldData("numberoflaps",parseInt(response.result.parameters.numberoflaps) , function(err,value) { console.log("Error: " + err + " Value: " +value); })
         }
-    if(response.result.parameters.TrackName) {
-        console.log("TrackName has value");
-        App.populateFieldData("trackname",response.result.parameters.TrackName , function(err,value) { console.log("Error: " + err + " Value: " +value); })
+    if(response.result.parameters.trackname) {
+        console.log("trackname has value");
+        App.populateFieldData("trackname",response.result.parameters.trackname , function(err,value) { console.log("Error: " + err + " Value: " +value); })
+        //Setting Driving Distance
+        if(response.result.parameters.numberoflaps) {
+            // We can add more tracks later
+            console.log("drivedistance assuming Nurburgring which is around 13miles/21km");
+            var totalDistance=parseInt(response.result.parameters.numberoflaps)*13;
+            console.log("Total Driving Distance is: " + totalDistance);
+            App.populateFieldData("drivedistance",totalDistance , function(err,value) { console.log("Error: " + err + " Value: " +value);})
+        }
     }
-    if(response.result.parameters.Comment) {
-        console.log("Comment has value");
-        App.populateFieldData("comment",response.result.parameters.Comment , function(err,value) { console.log("Error: " + err + " Value: " +value); })
+    if(response.result.parameters.drivetime) {
+            console.log("drivetime has value");
+            App.populateFieldData("drivetime",parseInt(response.result.parameters.drivetime) , function(err,value) { console.log("Error: " + err + " Value: " +value); })
+            //Setting Average Speed
+            if((response.result.parameters.numberoflaps) && (response.result.parameters.trackname)){
+                // We can add more tracks later
+                console.log("speed assuming Nurburgring which is around 13miles/21km");
+                var driveTimeInhr = parseInt(response.result.parameters.drivetime)/60;
+                console.log("driveTimenhr: " + driveTimeInhr);
+                var averageSpeed=Math.round((parseInt(response.result.parameters.numberoflaps)*13)/driveTimeInhr);
+                console.log("Average speed is: " + averageSpeed);
+                App.populateFieldData("speed",averageSpeed , function(err,value) { console.log("Error: " + err + " Value: " +value);})
+            }
+        }
+    if(response.result.parameters.comment) {
+        console.log("comment has value");
+        App.populateFieldData("comment",response.result.parameters.comment , function(err,value) { console.log("Error: " + err + " Value: " +value); })
     }
 
 
