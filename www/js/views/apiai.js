@@ -23,18 +23,25 @@ App.apiai = function(callback) {
        // Success TTS
        function ()
        {
+            console.log("TTS Retuned tyrying requestVoice");
             try {
+            /*var called = false;
+            			ApiAIPlugin.setListeningStartCallback(function () {
+            				called = true;
+            				ApiAIPlugin.stopListening();
+            			});*/
                     ApiAIPlugin.requestVoice({}, // empty for simple requests, some optional parameters can be here
                      function (response)
                      {
                         var question = JSON.stringify(response.result.fulfillment.speech);
                         var isConversationDone = JSON.stringify(response.result.actionIncomplete);
-                        console.log("Initial question: " + question + " Initial action: " + isConversationDone);
+                        console.log("IIIIIIIIInitial question: " + question + " Initial action: " + isConversationDone);
                         App.sendVoice(question);
 
                      },
                      function (error)
                      {
+                         console.log("ERRRRROOOOOOR");
                          alert(error);
                      });
             } catch (e)
@@ -47,7 +54,7 @@ App.apiai = function(callback) {
        //FAIL TTS
        function (reason)
        {
-            alert(reason);
+           alert(reason);
        });
 
      },
