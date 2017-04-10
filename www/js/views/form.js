@@ -43,13 +43,6 @@ $fh.ready({}, function() {
             ]);
         },
         submit: function() {
-
-            // Test form submission UI
-            /*    App.populateFieldData("carmodel", "911 Turbo",function(error,value)
-                {
-                    console.log("Error " + error + "Value" + value);
-                });
-            AlertView.showAlert("Processing Submission", "info", 1000);*/
             console.log("Submitting Report");
 
             $fh.forms.backbone.FormView.prototype.submit.apply(this, [

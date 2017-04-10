@@ -25,23 +25,16 @@ App.apiai = function(callback) {
        {
             console.log("TTS Retuned tyrying requestVoice");
             try {
-            /*var called = false;
-            			ApiAIPlugin.setListeningStartCallback(function () {
-            				called = true;
-            				ApiAIPlugin.stopListening();
-            			});*/
                     ApiAIPlugin.requestVoice({}, // empty for simple requests, some optional parameters can be here
                      function (response)
                      {
                         var question = JSON.stringify(response.result.fulfillment.speech);
                         var isConversationDone = JSON.stringify(response.result.actionIncomplete);
-                        console.log("IIIIIIIIInitial question: " + question + " Initial action: " + isConversationDone);
                         App.sendVoice(question);
 
                      },
                      function (error)
                      {
-                         console.log("ERRRRROOOOOOR");
                          alert(error);
                      });
             } catch (e)
@@ -115,9 +108,8 @@ App.sendVoice = function(question) {
                                 " and your average speed was " + Math.round(parseInt(response2.result.parameters.numberoflaps)*13/driveTimeInhr) + " miles per hour. We will submit your report.";
                                 console.log(finalString);
 
-                                //TTS.speak(question2, function () {
+
                                 TTS.speak(finalString, function () {
-                                  //alert('success');
                                   // Submitting report
                                   App.views.form.submit();
                                 }, function (reason) {
@@ -160,8 +152,6 @@ App.populateForm = function(response) {
     "parameters": {       "carmake": "Porsche",       "carmodel": "",       "caryear": "",       "numberoflaps": "",       "trackname": ""     },     "contexts": [       {         "name": "47c48814-3321-46ce-af64-6e10f6a3364d_id_dialog_context",         "parameters": {           "trackname.original": "",           "carmake": "Porsche",           "carmodel": "",           "numberoflaps": "",           "numberoflaps.original": "",           "carmodel.original": "",           "carmake.original": "Porsche",           "trackname": "",           "caryear": "",           "caryear.original": ""         },         "lifespan": 2       },       {         "name": "create_report-car_dialog_context",         "parameters": {           "trackname.original": "",           "carmake": "Porsche",           "carmodel": "",           "numberoflaps": "",           "numberoflaps.original": "",           "carmodel.original": "",           "carmake.original": "Porsche",           "trackname": "",           "caryear": "",           "caryear.original": ""         },         "lifespan": 2       },       {         "name": "create_report-car_dialog_params_carmodel",         "parameters": {           "trackname.original": "",           "carmake": "Porsche",           "carmodel": "",           "numberoflaps": "",           "numberoflaps.original": "",           "carmodel.original": "",           "carmake.original": "Porsche",           "trackname": "",           "caryear": "",           "caryear.original": ""         },         "lifespan": 1       }     ],     "metadata": {       "intentId": "47c48814-3321-46ce-af64-6e10f6a3364d",       "webhookUsed": "false",       "webhookForSlotFillingUsed": "false",       "intentName": "create.report-car"     },     "fulfillment": {       "speech": "What is the car model?",       "messages": [         {           "type": 0,           "speech": "What is the car model?"         }       ]     },     "score": 1.0   },   "status": {     "code": 200,     "errorType": "success"   },   "sessionId": "ecf99cd2-bb54-4dab-b300-d648832e656f" }
 
     */
-    //console.log(response.result.parameters.carmake);
-    //console.log(response);
     console.log("carmake:" + response.result.parameters.carmake);
     console.log("carmodel:" + response.result.parameters.carmodel);
     console.log("caryear:" + response.result.parameters.caryear);
